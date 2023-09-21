@@ -1,13 +1,10 @@
 #!/usr/bin/env python
-import os
 import platform
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
 
 
-USE_CYTHON = 'CYTHONIZE' in os.environ
 IS_PYPY = platform.python_implementation() == 'PyPy'
-ext = '.pyx' if USE_CYTHON else '.c'
 try:
     import numpy as np
     include_dirs = [np.get_include()]
@@ -15,10 +12,10 @@ except ImportError:
     include_dirs = []
 extensions = [
     Extension("scrapely._htmlpage",
-              ["scrapely/_htmlpage%s" % ext],
+              ["scrapely/_htmlpage.pyx"],
               include_dirs=include_dirs),
     Extension("scrapely.extraction._similarity",
-              ["scrapely/extraction/_similarity%s" % ext],
+              ["scrapely/extraction/_similarity.pyx"],
               include_dirs=include_dirs),
 ]
 if USE_CYTHON and not IS_PYPY:
